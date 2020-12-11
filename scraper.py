@@ -1,31 +1,18 @@
 import requests
 import re
 
-#enter the year with 
-year = input("Enter the year: ")
-
-while len(year) != 4 or int(year) < 1990:
-	print("Input must be of the form XXXX (ex: 2013)"   
-		+ " and must be after the year ...")
-	year = input("Enter the year: ")
-
-quarter = input("Enter the quarter: ")
-
-while len(quarter) != 1 or int(quarter) > 4 or int(quarter) < 1:
-	print("Input must be of the form X (ex: 3 for the third quarter)"   
-		+ " and must between 1 and 4")
-	quarter = input("Enter the quarter: ")
-
-quarter = 'QTR' + quarter
-
-
+# Create a dictionary for the tickers and CIK
 tickers = {}
-
 with open('tickers.txt') as f:
 	for line in f:
 		obj = line.split('\t')
 		tickers[obj[0]] = obj[1][:-1]
 
+
+# get the year (ex: 2009), the quarter (ex: 3), and the ticker (ex: appl)
+year = input("Enter the year: ")
+quarter = 'QTR' + input("Enter the quarter: QTR")
+ticker = input("Enter the ticker: ")
 
 # given a ticker return the unique CIK 
 def getCIK(ticker):
@@ -36,11 +23,9 @@ def getCIK(ticker):
 r = requests.get("https://www.sec.gov/Archives/edgar/full-index/{}/{}/master.idx".format(year, quarter))
 
 
-
 #testing code
-cik = getCIK('aapl')
-tenQ = '10-Q'
-tenK = '10-K'
+cik = getCIK(ticker)
+
 
 # The format is:
 # CIK|Company Name|Form Type|Date Filed|Filename
@@ -58,16 +43,4 @@ form = filename + ".txt"
 r = requests.get("https://www.sec.gov/Archives/" + form)
 print(r.text[:1000])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#r is the 10-K/10-Q form
