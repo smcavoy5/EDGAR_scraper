@@ -52,10 +52,8 @@ company_information = line.group().split('|')
 
 # Now we actually grab the txt file which is the 10-K/10-Q
 # which can be parsed for more information
-filename = company_information[4]
-form = filename + ".txt"
+form = company_information[4] + ".txt"
 report = requests.get("https://www.sec.gov/Archives/" + form)
-print(report.text[:3000])
 
 
 #raw report is the 10-K/10-Q form
